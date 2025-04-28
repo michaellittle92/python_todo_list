@@ -1,16 +1,21 @@
-tasks = [{
-    "task": "this is task 1",
-    "status": False
-},{
-  "task": "this is task 2",
-    "status": False  
-}]
-
+import sqlite3
 
 def CreateItem():
     print("Add Task item")
     item = input("Enter task item.")
-    tasks.append({"task": item, "status": False})
+    
+    sqliteConnection = sqlite3.connect("todo.db")
+    cursor = sqliteConnection.cursor()
+
+    insert_query = """INSERT INTO Tasks (task_name, is_complete)
+    VALUES (?, 0)
+    ;"""
+    cursor.execute(insert_query, (item,))
+    sqliteConnection.commit()
+    cursor.close()
+    sqliteConnection.close()
+
+
     print(f"{item} has been successfully added to the tasks list.")
 
 def ReadItems():
@@ -46,6 +51,16 @@ def DeleteItem():
 
     print(f"the task: {deleted_task["task"]}. has been deleted. ")
 
+def InitializeDatabase():
+    sqliteConnection = sqlite3.connect("todo.db")
+    cursor = sqliteConnection.cursor()
+
+    table = """CREATE TABLE IF NOT EXISTS Tasks (
+    task_name TEXT NOT NULL,
+    is_complete INTEGER NOT NULL
+    );"""
+    cursor.execute(table)
+
 def menu(): 
     exit = False
     while exit == False:
@@ -74,5 +89,6 @@ def menu():
             print("An error has occoured. Please Try again\n")
 
 print("Todo List.")
+InitializeDatabase()
 menu()
 
