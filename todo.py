@@ -19,15 +19,22 @@ def CreateItem():
     print(f"{item} has been successfully added to the tasks list.")
 
 def ReadItems():
-    for item in tasks:
-        print(RowBuilder(item["task"], item["status"]))
-
-def RowBuilder(task, status):
-    if status == False:
+    sqliteConnection = sqlite3.connect("todo.db")
+    cursor = sqliteConnection.cursor()
+    cursor.execute("SELECT * FROM Tasks")
+    rows = cursor.fetchall()
+    i = 1
+    for row in rows:
+        string = RowBuilder(i ,row[0], row[1])
+        print(string)
+        i += 1
+    sqliteConnection.close()
+def RowBuilder(index, task, status):
+    if status == 0:
         status = ("[ ]")
     else:
         status = ("[x]")
-    return(f"{task}    {status}")
+    return(f"{index}. {task}    {status}")
 
 def CompleteItem():
     print("TODO: Compete item stored in tasks")
