@@ -23,11 +23,11 @@ def ReadItems():
     cursor = sqliteConnection.cursor()
     cursor.execute("SELECT * FROM Tasks")
     rows = cursor.fetchall()
-    i = 1
+ 
     for row in rows:
-        string = RowBuilder(i ,row[0], row[1])
+        string = RowBuilder(row[0] ,row[1], row[2])
         print(string)
-        i += 1
+    
     sqliteConnection.close()
 def RowBuilder(index, task, status):
     if status == 0:
@@ -39,16 +39,40 @@ def RowBuilder(index, task, status):
 def CompleteItem():
     print("TODO: Compete item stored in tasks")
     ReadItems()
-    user_input = int(input("select the row number of the item you want to marks as complete: ")) -1
-    tasks[user_input]["status"] = True
-    print(f"{tasks[user_input]["task"]} has been marked as complete")
+    user_input = int(input("select the row number of the item you want to marks as complete: "))
+    sqliteConnection = sqlite3.connect("todo.db")
+    cursor = sqliteConnection.cursor()
+    new_status = 1
+    update_query ="""  
+    UPDATE Tasks
+    SET is_complete = ?
+    WHERE task_id = ?
+    """
+    cursor.execute(update_query, (new_status, user_input))
+    sqliteConnection.commit()
+    print(f"task has been marked as complete")
 
 def ModifyItem():
     ReadItems()
-    user_input = int(input("select the row number of the item you want to edit: ")) -1
-    old_task_text = tasks[user_input]["task"]
+    user_input = int(input("select the row number of the item you want to edit: "))
+    old_task_text = "temporary"
     new_task_text = input("new task text: ")
-    tasks[user_input]["task"] = new_task_text
+    sqliteConnection = sqlite3.connect("todo.db")
+    cursor = sqliteConnection.cursor()
+    get_single_task_name_query = """
+    SELECT task_name FROM Tasks 
+    WHERE task_id = ?
+    """
+    cursor.execute(get_single_task_name_query, (user_input,))
+    old_task_text = cursor.fetchone()[0]
+
+    update_query = """
+    UPDATE Tasks 
+    SET task_name = ?
+    WHERE task_id = ?
+    """
+    cursor.execute(update_query, (new_task_text, user_input))
+    sqliteConnection.commit()
     print(f"{old_task_text} has now been updated to {new_task_text}")
     
 def DeleteItem():
@@ -63,6 +87,7 @@ def InitializeDatabase():
     cursor = sqliteConnection.cursor()
 
     table = """CREATE TABLE IF NOT EXISTS Tasks (
+    task_id INTEGER PRIMARY KEY AUTOINCREMENT,
     task_name TEXT NOT NULL,
     is_complete INTEGER NOT NULL
     );"""
