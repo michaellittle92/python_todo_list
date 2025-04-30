@@ -77,10 +77,28 @@ def ModifyItem():
     
 def DeleteItem():
     ReadItems()
-    user_input = int(input("select the row number of the item you want to delete: ")) -1
-    deleted_task = tasks.pop(user_input)
+    user_input = int(input("select the row number of the item you want to delete: ")) 
 
-    print(f"the task: {deleted_task["task"]}. has been deleted. ")
+    sqliteConnection = sqlite3.connect("todo.db")
+    cursor = sqliteConnection.cursor()
+
+    get_single_task_name_query = """
+    SELECT task_name FROM Tasks 
+    WHERE task_id = ?
+    """
+
+    cursor.execute(get_single_task_name_query, (user_input,))
+    old_task_text = cursor.fetchone()[0]
+
+    delete_query = """
+    Delete FROM Tasks
+    Where task_id = ?
+    """
+    
+    cursor.execute(delete_query, (user_input,))
+    sqliteConnection.commit()
+
+    print(f"the task: {old_task_text}. has been deleted. ")
 
 def InitializeDatabase():
     sqliteConnection = sqlite3.connect("todo.db")
