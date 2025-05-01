@@ -18,7 +18,7 @@ def CreateItem():
 
     print(f"{item} has been successfully added to the tasks list.")
 
-def ReadItems():
+def ReadAllItems():
     sqliteConnection = sqlite3.connect("todo.db")
     cursor = sqliteConnection.cursor()
     cursor.execute("SELECT * FROM Tasks")
@@ -38,7 +38,7 @@ def RowBuilder(index, task, status):
 
 def CompleteItem():
     print("TODO: Compete item stored in tasks")
-    ReadItems()
+    ReadAllItems()
     user_input = int(input("select the row number of the item you want to marks as complete: "))
     sqliteConnection = sqlite3.connect("todo.db")
     cursor = sqliteConnection.cursor()
@@ -53,7 +53,7 @@ def CompleteItem():
     print(f"task has been marked as complete")
 
 def ModifyItem():
-    ReadItems()
+    ReadAllItems()
     user_input = int(input("select the row number of the item you want to edit: "))
     old_task_text = "temporary"
     new_task_text = input("new task text: ")
@@ -76,7 +76,7 @@ def ModifyItem():
     print(f"{old_task_text} has now been updated to {new_task_text}")
     
 def DeleteItem():
-    ReadItems()
+    ReadAllItems()
     user_input = int(input("select the row number of the item you want to delete: ")) 
 
     sqliteConnection = sqlite3.connect("todo.db")
@@ -123,7 +123,7 @@ def menu():
         print("6. Exit")
         user_input = int(input("Enter the coresponding number to make your selection."))
         if user_input == 1:
-            ReadItems()
+            ReadAllItems()
         elif user_input == 2: 
             CreateItem()
         elif user_input == 3: 
