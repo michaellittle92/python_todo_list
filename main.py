@@ -1,16 +1,10 @@
-import sqlite3
 from task import Task
+from taskmanger import *
 
-def InitializeDatabase():
-    sqliteConnection = sqlite3.connect("todo.db")
-    cursor = sqliteConnection.cursor()
+item = Task(0, "class test", False)
+item.create_new_task()
 
-    table = """CREATE TABLE IF NOT EXISTS Tasks (
-    task_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    task_name TEXT NOT NULL,
-    is_complete INTEGER NOT NULL
-    );"""
-    cursor.execute(table)
+print(item)
 
 def menu(): 
     exit = False
@@ -24,22 +18,30 @@ def menu():
         print("6. Exit")
         user_input = int(input("Enter the coresponding number to make your selection."))
         if user_input == 1:
-            ReadAllItems()
+           all_tasks = TaskManager.get_all_tasks()
+           for task in all_tasks:
+               print(task)
         elif user_input == 2: 
             CreateItem()
         elif user_input == 3: 
-            CompleteItem()
+            #CompleteItem()
+            pass
         elif user_input == 4:
-            ModifyItem()
+           # ModifyItem()
+           pass
         elif user_input == 5:
-            DeleteItem()
+          #  DeleteItem()
+          pass
         elif user_input == 6:
            exit = True
            print("exiting program...")
         else: 
             print("An error has occoured. Please Try again\n")
 
+def CreateItem():
+    user_input = input("Enter new task item: ")
+    item = Task(0, user_input, False).create_new_task()
 print("Todo List.")
-InitializeDatabase()
+#InitializeDatabase()
 menu()
 

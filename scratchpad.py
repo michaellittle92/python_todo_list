@@ -1,3 +1,3 @@
-test_list = ["alpha", "bravo", "charlie"]
+from taskmanger import *
 
-print(test_list[1])
+TaskManager.get_all_tasks()
