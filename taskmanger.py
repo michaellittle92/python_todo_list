@@ -19,7 +19,7 @@ class TaskManager:
            tasks.append(Task(task[0], task[1], task[2]))
         return tasks
     
-    def get_all_complete_tasks():
+    def get_all_incomplete_tasks():
         tasks = []
         # Connect to DB
         sqliteConnection = sqlite3.connect("todo.db")

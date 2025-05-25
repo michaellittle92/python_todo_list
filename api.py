@@ -2,6 +2,8 @@ from fastapi import FastAPI, HTTPException
 from taskmanger import *
 from task import Task
 
+InitializeDatabase()
+
 app = FastAPI()
 
 @app.get("/")
@@ -13,9 +15,9 @@ async def Get_All_Tasks():
     all_tasks = TaskManager.get_all_tasks()
     return all_tasks
 
-@app.get("/get-all-complete-tasks")
-async def Get_All_Complete_Tasks():
-    all_tasks = TaskManager.get_all_complete_tasks()
+@app.get("/get-all-incomplete-tasks")
+async def Get_All_Incomplete_Tasks():
+    all_tasks = TaskManager.get_all_incomplete_tasks()
     return all_tasks
 
 @app.post("/add_task")
