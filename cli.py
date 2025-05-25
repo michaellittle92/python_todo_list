@@ -1,46 +1,21 @@
-from task import Task
+from rich.console import Console 
+from rich.table import Table
 from taskmanger import *
 
-item = Task(0, "class test", False)
-item.create_new_task()
+console = Console()
 
-print(item)
+console.print("Hello", "World", style="bold red")
 
-def menu(): 
-    exit = False
-    while exit == False:
-        print("menu.")
-        print("1. Show all current items")
-        print("2. Add an item.")
-        print("3. Complete an item")
-        print("4. Modify an item")
-        print("5. Delete an item")
-        print("6. Exit")
-        user_input = int(input("Enter the coresponding number to make your selection."))
-        if user_input == 1:
-           all_tasks = TaskManager.get_all_tasks()
-           for task in all_tasks:
-               print(task)
-        elif user_input == 2: 
-            CreateItem()
-        elif user_input == 3: 
-            #CompleteItem()
-            pass
-        elif user_input == 4:
-           # ModifyItem()
-           pass
-        elif user_input == 5:
-          #  DeleteItem()
-          pass
-        elif user_input == 6:
-           exit = True
-           print("exiting program...")
-        else: 
-            print("An error has occoured. Please Try again\n")
+table = Table(title = "Tasks")
+table.add_column("Task_id")
+table.add_column("Task_name")
+table.add_column("Is_complete")
 
-def CreateItem():
-    user_input = input("Enter new task item: ")
-    item = Task(0, user_input, False).create_new_task()
-print("Todo List.")
-menu()
+all_tasks = TaskManager.get_all_tasks()
 
+for task in all_tasks: 
+    table.add_row(str(task.task_id), task.task_name, str(task.is_complete))
+
+#print(all_tasks[0].task_name)
+
+console.print(table)
