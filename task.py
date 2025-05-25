@@ -41,14 +41,15 @@ class Task:
         sqliteConnection = sqlite3.connect("todo.db")
         cursor = sqliteConnection.cursor()
         mark_complete_query = """
-        Update Tasks 
-        Set is_complete = 1
+        UPDATE Tasks 
+        SET is_complete = 1
         WHERE task_id = ?
         """
         cursor.execute(mark_complete_query, (self.task_id,))
         sqliteConnection.commit()
         cursor.close()
         sqliteConnection.close()
+        self.is_complete = True
     
     def delete_task(self):
         sqliteConnection = sqlite3.connect("todo.db")
@@ -61,3 +62,23 @@ class Task:
         sqliteConnection.commit()
         cursor.close()
         sqliteConnection.close()
+
+    @classmethod
+    def get_task_by_id(cls, task_id):
+        sqliteConnection = sqlite3.connect("todo.db")
+        cursor = sqliteConnection.cursor()
+        select_query = """
+        SELECT task_id, task_name, is_complete
+        FROM Tasks
+        Where task_id = ?
+        """
+
+        cursor.execute(select_query, (task_id,))
+        row = cursor.fetchone()
+        cursor.close
+        sqliteConnection.close()
+
+        if row:
+            return cls(task_id=row[0], task_name=row[1], is_complete=bool(row[2]))
+        else:
+            return None

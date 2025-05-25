@@ -42,6 +42,5 @@ def CreateItem():
     user_input = input("Enter new task item: ")
     item = Task(0, user_input, False).create_new_task()
 print("Todo List.")
-#InitializeDatabase()
 menu()
 
