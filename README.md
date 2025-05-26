@@ -12,3 +12,5 @@ python_todo_list/
 ├── todo.db          # SQLite database file
 ├── requirements.txt # Project dependencies
 └── .gitignore       # Git ignore file
+
+<img width="899" alt="Image" src="https://github.com/user-attachments/assets/dc2ff38c-e272-4843-9c27-f190d1d16156" />
